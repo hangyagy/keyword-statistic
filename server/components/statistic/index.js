@@ -5,7 +5,7 @@ var XRegExp = require('xregexp').XRegExp;
 var textToWords = function(text) {
   var words;
 
-  text = text.replace(/[.,?_+*!$&~@-^]/g, "");
+  text = text.replace(/[.,?_+*!$&~@-^]/g, " ");
 
   words = text.trim().split(/\s+/);
 
@@ -19,15 +19,21 @@ var textToWords = function(text) {
 
 var dataToStatistic = function(data) {
   var result = {};
+  var content = data.content;
 
-  _.each(data, function(tagData) {
+  var titleWords = textToWords(data.title);
+
+  _.each(content, function(tagData) {
     var tagName = tagData.tag.toLowerCase();
     var text    = tagData.text.toLowerCase();
 	var parents = tagData.parents || [];
+	var attrs   = tagData.attributes;
 
     var words = textToWords(text);
 
     var inHeadline = false;
+	var inTitle    = false;
+	var inMeta     = false;
 
 	var hParent = _.find(parents, function(tag) {
     	return /^H[0-9]/.test(tag);
@@ -59,8 +65,8 @@ var dataToStatistic = function(data) {
 
 var getStatistic = function(url) {
   return crawler.getContent(url)
-    .then(function(content) {
-      return dataToStatistic(content);
+    .then(function(data) {
+      return dataToStatistic(data);
     });
 };
 
