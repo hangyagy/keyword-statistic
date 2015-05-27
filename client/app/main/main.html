@@ -1,28 +1,47 @@
-<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h2>Test your webpage</h2>
 
-<header class="hero-unit" id="banner">
-  <div class="container">
-    <h1>'Allo, 'Allo!</h1>
-    <p class="lead">Kick-start your next web app with Angular Fullstack</p>
-    <img src="assets/images/yeoman.png" alt="I'm Yeoman">
-  </div>
-</header>
+        <form ng-submit="getStatistic()">
+          <div class="form-group">
+            <label for="registration-id">URL</label>
+            <input id="registration-id" ng-model="url" class="form-control" type="text" placeholder="Please enter a valid URL"/>
+          </div>
+          <div>
+            <button type="submit" class="btn btn-primary pull-right">Send</button>
+          </div>
+        </form>
 
-<div class="container">
-  <div class="row">
-    <div class="col-lg-12">
-      <h1 class="page-header">Features:</h1>
-      <ul class="nav nav-tabs nav-stacked col-md-4 col-lg-4 col-sm-6" ng-repeat="thing in awesomeThings">
-        <li><a href="#" tooltip="{{thing.info}}">{{thing.name}}</a></li>
-      </ul>
+      </div>
     </div>
   </div>
 </div>
 
-<footer class="footer">
-  <div class="container">
-      <p>Angular Fullstack v2.0.13 |
-        <a href="https://twitter.com/tyhenkel">@tyhenkel</a> |
-         <a href="https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open">Issues</a></p>
+<div class="row" ng-if="statistics">
+  <div class="col-lg-12">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th><a ng-click="order='word'; reverse=!reverse" href="#">Word</a></th>
+          <th><a ng-click="order='count'; reverse=!reverse" href="#">Count</a></th>
+          <th><a ng-click="order='inHeadline'; reverse=!reverse" href="#">In h</a></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="statistic in statistics | orderBy:order:reverse">
+          <td>
+            {{statistic.word}}
+          </td>
+          <td>
+            {{statistic.count}}
+          </td>
+          <td>
+            <span ng-if="statistic.inHeadline">X</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
   </div>
-</footer>
+</div>

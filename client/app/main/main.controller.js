@@ -2,10 +2,26 @@
 
 angular.module('keywordStatisticsApp')
   .controller('MainCtrl', function ($scope, $http) {
-    $scope.awesomeThings = [];
+    $scope.url = '';
+    $scope.statistics = false;
+    $scope.order = 'count';
+    $scope.reverse = true;
 
-    $http.get('/api/things').success(function(awesomeThings) {
-      $scope.awesomeThings = awesomeThings;
-    });
+    $scope.getStatistic = function() {
+
+      $http
+        .get('/api/contents', {
+          params: {
+            url: $scope.url
+          }
+        })
+        .success(function(data) {
+          $scope.statistics = data;
+        })
+        .error(function(data) {
+          console.log(data);
+        });
+
+    };
 
   });

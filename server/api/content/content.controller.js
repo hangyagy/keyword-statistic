@@ -16,5 +16,7 @@ exports.index = function(req, res) {
       .catch(function(err) {
         throw err;
       });
+  } else {
+    res.status(404).send('Page not found');
   }
 };

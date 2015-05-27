@@ -5,7 +5,7 @@ var XRegExp = require('xregexp').XRegExp;
 var textToWords = function(text) {
   var words;
 
-  text = text.replace(/[.,?_+*!$&~@-^]/g, " ");
+  text = text.replace(/[.:,?_+*!$&~@-^]/g, " ");
 
   words = text.trim().split(/\s+/);
 
@@ -17,6 +17,17 @@ var textToWords = function(text) {
 
 };
 
+var resultToArray = function(result) {
+  var resultArray = [];
+
+  _.each(result, function(value, key) {
+    value.word = key;
+    resultArray.push(value);
+  });
+
+  return _.sortBy(resultArray, 'count').reverse();
+};
+
 var dataToStatistic = function(data) {
   var result = {};
   var content = data.content;
@@ -26,18 +37,18 @@ var dataToStatistic = function(data) {
   _.each(content, function(tagData) {
     var tagName = tagData.tag.toLowerCase();
     var text    = tagData.text.toLowerCase();
-	var parents = tagData.parents || [];
-	var attrs   = tagData.attributes;
+    var parents = tagData.parents || [];
+    var attrs   = tagData.attributes;
 
     var words = textToWords(text);
 
     var inHeadline = false;
-	var inTitle    = false;
-	var inMeta     = false;
+    var inTitle    = false;
+    var inMeta     = false;
 
-	var hParent = _.find(parents, function(tag) {
-    	return /^H[0-9]/.test(tag);
-	});
+    var hParent = _.find(parents, function(tag) {
+      return /^H[0-9]/.test(tag);
+    });
 
     if ( typeof hParent !== 'undefined' ) {
       inHeadline = true;
@@ -60,7 +71,7 @@ var dataToStatistic = function(data) {
     });
   });
 
-  return result;
+  return resultToArray(result);
 };
 
 var getStatistic = function(url) {
